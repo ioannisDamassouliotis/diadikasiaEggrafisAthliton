@@ -190,16 +190,16 @@ $("document").ready(function () {
       ft++;
     });
 
-    if (!all_questions.some((q) => q.id === questionId)) {
-      // Αν δεν υπάρχει άλλη ερώτηση, εμφάνιση μηνύματος
-      $("#questionContainer").html(
-        currentLanguage === "greek"
-          ? "Δεν μπορείτε να εγγραφείτε."
-          : "You cannot register."
-      );
-      $("#nextQuestion").hide();
-      return;
-    }
+    // if (!all_questions.some((q) => q.id === questionId)) {
+    //   // Αν δεν υπάρχει άλλη ερώτηση, εμφάνιση μηνύματος
+    //   $("#questionContainer").html(
+    //     currentLanguage === "greek"
+    //       ? "Δεν μπορείτε να εγγραφείτε."
+    //       : "You cannot register."
+    //   );
+    //   $("#nextQuestion").hide();
+    //   return;
+    // }
 
     $(".faqContainer").html(faqElement);
   }
@@ -215,95 +215,96 @@ $("document").ready(function () {
 
   //Εachtime back/next buttons are pressed the form loads a question
   function loadQuestion(questionId, noError) {
-    
+    // Show navigation buttons by default
     $("#nextQuestion").show();
     if (currentQuestion > 0) {
       $("#backButton").show();
-    } 
+    }
 
-    currentLanguage === "greek"
-      ? (question = all_questions[questionId])
-      : (question = all_questions_en[questionId]);
+    // Get the current question based on language
+    let question = currentLanguage === "greek"
+      ? all_questions.find(q => q.id === questionId)
+      : all_questions_en.find(q => q.id === questionId);
+
+    // Check if question exists
+    if (!question) {
+      console.error(`Question with ID ${questionId} not found`);
+      const errorMessage = document.createElement("div");
+      errorMessage.textContent = currentLanguage === "greek"
+        ? "Σφάλμα: Η ερώτηση δεν βρέθηκε."
+        : "Error: Question not found.";
+      $(".question-container").html(errorMessage);
+      hideFormBtns();
+      return;
+    }
+
+    // Handle end states
+    if (questionId === "END_NO" || questionId === "END_YES") {
+      const endMessage = document.createElement("div");
+      endMessage.className = "govgr-heading-l";
+      endMessage.textContent = question.question;
+      $(".question-container").html(endMessage);
+      hideFormBtns();
+      return;
+    }
+
     var questionElement = document.createElement("div");
 
-    //If the user has answered the question (checked a value), no error occurs. Otherwise you get an error (meaning that user needs to answer before he continues to the next question)!
     if (noError) {
       questionElement.innerHTML = `
-                <div class='govgr-field'>
-                    <fieldset class='govgr-fieldset' aria-describedby='radio-country'>
-                        <legend role='heading' aria-level='1' class='govgr-fieldset__legend govgr-heading-l'>
-                            ${question.question}
-                        </legend>
-                        <div class='govgr-radios' id='radios-${questionId}'>
-                            <ul>
-                                ${question.options
-                                  .map(
-                                    (option, index) => `
-                                    <div class='govgr-radios__item'>
-                                        <label class='govgr-label govgr-radios__label'>
-                                            ${option}
-                                            <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
-                                        </label>
-                                    </div>
-                                `
-                                  )
-                                  .join("")}
-                            </ul>
-                        </div>
-                    </fieldset>
-                </div>
-            `;
-    } else {
-      questionElement.innerHTML = `
-            <div class='govgr-field govgr-field__error' id='$id-error'>
+        <div class='govgr-field'>
+          <fieldset class='govgr-fieldset' aria-describedby='radio-country'>
             <legend role='heading' aria-level='1' class='govgr-fieldset__legend govgr-heading-l'>
-                        ${question.question}
-                    </legend>
-                <fieldset class='govgr-fieldset' aria-describedby='radio-error'>
-                    <legend  class='govgr-fieldset__legend govgr-heading-m language-component' data-component='chooseAnswer'>
-                        Επιλέξτε την απάντησή σας
-                    </legend>
-                    <p class='govgr-hint language-component' data-component='oneAnswer'>Μπορείτε να επιλέξετε μόνο μία επιλογή.</p>
-                    <div class='govgr-radios id='radios-${questionId}'>
-                        <p class='govgr-error-message'>
-                            <span class='govgr-visually-hidden language-component' data-component='errorAn'>Λάθος:</span>
-                            <span class='language-component' data-component='choose'>Πρέπει να επιλέξετε μια απάντηση</span>
-                        </p>
-                        
-                            ${question.options
-                              .map(
-                                (option, index) => `
-                                <div class='govgr-radios__item'>
-                                    <label class='govgr-label govgr-radios__label'>
-                                        ${option}
-                                        <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
-                                    </label>
-                                </div>
-                            `
-                              )
-                              .join("")}
-                    </div>
-                </fieldset>
+              ${question.question}
+            </legend>
+            <div class='govgr-radios' id='radios-${questionId}'>
+              ${question.options.map((option) => `
+                <div class='govgr-radios__item'>
+                  <label class='govgr-label govgr-radios__label'>
+                    ${option}
+                    <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
+                  </label>
+                </div>
+              `).join("")}
             </div>
-        `;
-
-      //The reason for manually updating the components of the <<error>> questionElement is because the
-      //querySelectorAll method works on elements that are already in the DOM (Document Object Model)
-      if (currentLanguage === "english") {
-        // Manually update the english format of the last 4 text elements in change-language.js
-        //chooseAnswer: "Choose your answer",
-        //oneAnswer: "You can choose only one option.",
-        //errorAn: "Error:",
-        //choose: "You must choose one option"
-        var components = Array.from(
-          questionElement.querySelectorAll(".language-component")
-        );
-        components.slice(-4).forEach(function (component) {
-          var componentName = component.dataset.component;
-          component.textContent =
-            languageContent[currentLanguage][componentName];
-        });
-      }
+          </fieldset>
+        </div>
+      `;
+    } else {
+      // Error state HTML (keeping your existing error HTML structure)
+      questionElement.innerHTML = `
+        <div class='govgr-field govgr-field__error' id='$id-error'>
+          <legend role='heading' aria-level='1' class='govgr-fieldset__legend govgr-heading-l'>
+            ${question.question}
+          </legend>
+          <fieldset class='govgr-fieldset' aria-describedby='radio-error'>
+            <legend class='govgr-fieldset__legend govgr-heading-m language-component' data-component='chooseAnswer'>
+              ${currentLanguage === "greek" ? "Επιλέξτε την απάντησή σας" : "Choose your answer"}
+            </legend>
+            <p class='govgr-hint language-component' data-component='oneAnswer'>
+              ${currentLanguage === "greek" ? "Μπορείτε να επιλέξετε μόνο μία επιλογή." : "You can choose only one option."}
+            </p>
+            <div class='govgr-radios'>
+              <p class='govgr-error-message'>
+                <span class='govgr-visually-hidden language-component' data-component='errorAn'>
+                  ${currentLanguage === "greek" ? "Λάθος:" : "Error:"}
+                </span>
+                <span class='language-component' data-component='choose'>
+                  ${currentLanguage === "greek" ? "Πρέπει να επιλέξετε μια απάντηση" : "You must choose an answer"}
+                </span>
+              </p>
+              ${question.options.map((option) => `
+                <div class='govgr-radios__item'>
+                  <label class='govgr-label govgr-radios__label'>
+                    ${option}
+                    <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
+                  </label>
+                </div>
+              `).join("")}
+            </div>
+          </fieldset>
+        </div>
+      `;
     }
 
     $(".question-container").html(questionElement);
@@ -369,10 +370,10 @@ $("document").ready(function () {
     if (allAnswers[7] === "1") {
       getEvidencesById(12);
       currentLanguage === "greek"
-      ? setResult(
+        ? setResult(
           "Δικαιούστε έκπτωση 50% για τις εκτός ορίων της περιφέρειας σας μετακινήσεις με υπεραστικά ΚΤΕΛ."
         )
-      : setResult(
+        : setResult(
           "You are entitled to a 50% discount for transportation outside the boundaries of your region with long-distance bus services (named KTEL)."
         );
     } else if (allAnswers[7] === "2" && allAnswers[5] !== "1") {
@@ -380,27 +381,27 @@ $("document").ready(function () {
       if (allAnswers[8] === "1") {
         currentLanguage === "greek"
           ? setResult(
-              "Δικαιούσαι δωρεάν μετακίνησης με τα αστικά μέσα συγκοινωνίας της περιφέρειας σου και έκπτωση 50% για τις εκτός ορίων της περιφέρειας σου μετακινήσεις με υπεραστικά ΚΤΕΛ."
-            )
+            "Δικαιούσαι δωρεάν μετακίνησης με τα αστικά μέσα συγκοινωνίας της περιφέρειας σου και έκπτωση 50% για τις εκτός ορίων της περιφέρειας σου μετακινήσεις με υπεραστικά ΚΤΕΛ."
+          )
           : setResult(
-              "You are entitled to free transportation with the urban public bus of your region and a 50% discount for transportation outside the boundaries of your region with long-distance (intercity) bus services (named KTEL)."
-            );
+            "You are entitled to free transportation with the urban public bus of your region and a 50% discount for transportation outside the boundaries of your region with long-distance (intercity) bus services (named KTEL)."
+          );
       } else if (allAnswers[8] === "2") {
         currentLanguage === "greek"
           ? setResult(
-              "Δικαιούσαι έκπτωση 50% για τις εκτός ορίων της περιφέρειας σου μετακινήσεις με υπεραστικά ΚΤΕΛ."
-            )
+            "Δικαιούσαι έκπτωση 50% για τις εκτός ορίων της περιφέρειας σου μετακινήσεις με υπεραστικά ΚΤΕΛ."
+          )
           : setResult(
-              "You are entitled to a 50% discount for transportation outside the boundaries of your region with long-distance bus services (named KTEL)."
-            );
+            "You are entitled to a 50% discount for transportation outside the boundaries of your region with long-distance bus services (named KTEL)."
+          );
       }
     }
-    else if(allAnswers[7] === "2" && allAnswers[5] === "1"){
+    else if (allAnswers[7] === "2" && allAnswers[5] === "1") {
       currentLanguage === "greek"
-      ? setResult(
+        ? setResult(
           "Δικαιούσαι δωρεάν μετακίνησης με τα αστικά μέσα συγκοινωνίας της περιφέρειας σου και έκπτωση 50% για τις εκτός ορίων της περιφέρειας σου μετακινήσεις με υπεραστικά ΚΤΕΛ."
         )
-      : setResult(
+        : setResult(
           "You are entitled to free transportation with the urban public bus of your region and a 50% discount for transportation outside the boundaries of your region with long-distance (intercity) bus services (named KTEL)."
         );
     }
@@ -415,98 +416,46 @@ $("document").ready(function () {
     resultWrapper.innerHTML = `<h1 class='answer'>${titleText}</h1>`;
     resultWrapper.setAttribute("id", "resultWrapper");
     $(".question-container").html(resultWrapper);
-    
+
     const evidenceListElement = document.createElement("ol");
     evidenceListElement.setAttribute("id", "evidences");
     currentLanguage === "greek"
       ? $(".question-container").append(
-          "<br /><br /><h5 class='answer'>Τα δικαιολογητικά που πρέπει να προσκομίσετε για να λάβετε το δελτίο μετακίνησης είναι τα εξής:</h5><br />"
-        )
+        "<br /><br /><h5 class='answer'>Τα δικαιολογητικά που πρέπει να προσκομίσετε για να λάβετε το δελτίο μετακίνησης είναι τα εξής:</h5><br />"
+      )
       : $(".question-container").append(
-          "<br /><br /><h5 class='answer'>The documents you need to provide in order to receive your transportation card are the following:</h5><br />"
-        );
+        "<br /><br /><h5 class='answer'>The documents you need to provide in order to receive your transportation card are the following:</h5><br />"
+      );
     $(".question-container").append(evidenceListElement);
     $("#faqContainer").load("faq.html");
     retrieveAnswers();
     hideFormBtns();
   }
-//ai generated  
+
   $("#nextQuestion").click(function () {
     if ($(".govgr-radios__input").is(":checked")) {
-      const selectedOption = $(
-        'input[name="question-option"]:checked'
-      ).val();
-      const currentQuestionData = all_questions.find(
-        (q) => q.id === currentQuestion
-      );
-  
-      // Εύρεση της επόμενης ερώτησης με βάση την απάντηση
-      const nextQuestionId = currentQuestionData.next[selectedOption];
-  
+      const selectedOption = $('input[name="question-option"]:checked').val();
+      const currentQuestionData = all_questions.find(q => q.id === currentQuestion);
+
+      if (!currentQuestionData) {
+        console.error(`No question found for ID: ${currentQuestion}`);
+        return;
+      }
+
+      const nextQuestionId = currentQuestionData.next?.[selectedOption];
+
       if (nextQuestionId) {
         currentQuestion = nextQuestionId;
         loadQuestion(currentQuestion, true);
       } else {
-        // Αν δεν υπάρχει επόμενη ερώτηση, κάνε submit ή οτιδήποτε άλλο
         submitForm();
       }
     } else {
       loadQuestion(currentQuestion, false);
     }
-    if (nextQuestionId === "END_NO") {
-      $("#questionContainer").html("Δεν μπορείτε να εγγραφείτε.");
-      $("#nextQuestion").hide();
-    } else if (nextQuestionId === "END_YES") {
-      $("#questionContainer").html("Δικαιούστε εγγραφή.");
-      $("#nextQuestion").hide();
-    }
   });
-/* προτωτυπο
-  $("#nextQuestion").click(function () {
-    if ($(".govgr-radios__input").is(":checked")) {
-      var selectedRadioButtonIndex =
-        $('input[name="question-option"]').index(
-          $('input[name="question-option"]:checked')
-        ) + 1;
-      console.log(selectedRadioButtonIndex);
-      if (currentQuestion === 0 && selectedRadioButtonIndex === 3) {
-        currentQuestion = -1;
-        currentLanguage === "greek" ? skipToEnd("Μπορείτε να το εκδώσετε ξανά μόνο μια φορά μετά από απώλεια.") : skipToEnd("You can reissue it only one time after loss.");
-      } else if (currentQuestion === 1 && selectedRadioButtonIndex === 2) {
-        currentQuestion = -1;
-        currentLanguage === "greek" ? skipToEnd("Πρέπει να είστε μόνιμος και νόμιμος κάτοικος της Ελλάδας.") : skipToEnd("You must be permanent and legal resident of Greece.");
-      } else if (currentQuestion === 3 && selectedRadioButtonIndex === 2) {
-        currentQuestion = -1;
-        currentLanguage === "greek" ? skipToEnd("Πρέπει να έχετε ποσοστό αναπηρίας 67% και άνω ή να είστε δικαιούχος του επιδόματος ΟΠΕΚΑ.") : skipToEnd("You must have a disability rate of 67% or more or be a beneficiary of the OPEKA benefit.");
-      } else {
-        //save selectedRadioButtonIndex to the storage
-        userAnswers[currentQuestion] = selectedRadioButtonIndex;
-        sessionStorage.setItem(
-          "answer_" + currentQuestion,
-          selectedRadioButtonIndex
-        ); // save answer to session storage
 
-        //if the questions are finished then...
-        if (currentQuestion + 1 == totalQuestions) {
-          submitForm();
-        }
-        // otherwise...
-        else {
-          currentQuestion++;
-          loadQuestion(currentQuestion, true);
 
-          if (currentQuestion + 1 == totalQuestions) {
-            currentLanguage === "greek"
-              ? $(this).text("Υποβολή")
-              : $(this).text("Submit");
-          }
-        }
-      }
-    } else {
-      loadQuestion(currentQuestion, false);
-    }
-  });
-*/
   $("#backButton").click(function () {
     if (currentQuestion > 0) {
       currentQuestion--;
