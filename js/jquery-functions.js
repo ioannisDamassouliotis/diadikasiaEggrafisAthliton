@@ -209,7 +209,7 @@ $("document").ready(function () {
     if (currentQuestion > 0) {
       $("#backButton").show();
     }
-    
+
     // Get the current question based on language
     let question = currentLanguage === "greek"
       ? all_questions.find(q => q.id === questionId)
@@ -241,24 +241,24 @@ $("document").ready(function () {
 
     if (noError) {
       questionElement.innerHTML = `
-        <div class='govgr-field'>
-          <fieldset class='govgr-fieldset' aria-describedby='radio-country'>
-            <legend role='heading' aria-level='1' class='govgr-fieldset__legend govgr-heading-l'>
-              ${question.question}
-            </legend>
-            <div class='govgr-radios' id='radios-${questionId}'>
-              ${question.options.map((option) => `
-                <div class='govgr-radios__item'>
-                  <label class='govgr-label govgr-radios__label'>
-                    ${option}
-                    <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
-                  </label>
-                </div>
-              `).join("")}
-            </div>
-          </fieldset>
-        </div>
-      `;
+      <div class='govgr-field'>
+        <fieldset class='govgr-fieldset' aria-describedby='radio-country'>
+          <legend role='heading' aria-level='1' class='govgr-fieldset__legend govgr-heading-l'>
+            ${question.question}
+          </legend>
+          <div class='govgr-radios' id='radios-${questionId}'>
+            ${question.options.map((option) => `
+              <div class='govgr-radios__item'>
+                <label class='govgr-label govgr-radios__label'>
+                  ${option}
+                  <input class='govgr-radios__input' type='radio' name='question-option' value='${option}' />
+                </label>
+              </div>
+            `).join("")}
+          </div>
+        </fieldset>
+      </div>
+    `;
     } else {
       // Error state HTML (keeping your existing error HTML structure)
       questionElement.innerHTML = `
@@ -416,7 +416,7 @@ $("document").ready(function () {
         "<br /><br /><h5 class='answer'>The documents you need to provide in order to receive your transportation card are the following:</h5><br />"
       );
     $(".question-container").append(evidenceListElement);
-    $("#faqContainer").load("faq.html");
+    // $("#faqContainer").load("faq.html");
     retrieveAnswers();
     hideFormBtns();
   }
@@ -424,14 +424,16 @@ $("document").ready(function () {
   $("#nextQuestion").click(function () {
     if ($(".govgr-radios__input").is(":checked")) {
       const selectedOption = $('input[name="question-option"]:checked').val();
-      const currentQuestionData = all_questions.find(q => q.id === currentQuestion);
+      // Use the correct question data based on language
+      const questions = currentLanguage === "greek" ? all_questions : all_questions_en;
+      const currentQuestionData = questions.find(q => q.id === currentQuestion);
 
       if (!currentQuestionData) {
         console.error(`No question found for ID: ${currentQuestion}`);
         return;
       }
 
-      const nextQuestionId = currentQuestionData.next?.[selectedOption];
+      const nextQuestionId = currentQuestionData.next[selectedOption];
 
       if (nextQuestionId) {
         currentQuestion = nextQuestionId;
