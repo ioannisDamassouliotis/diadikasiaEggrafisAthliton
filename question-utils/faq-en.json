@@ -8,14 +8,8 @@
         "id": 1,
         "question": "Who is the process addressed to?",
         "answer": "The process is intended for athletes who achieve competitive distinctions in the Olympic Games, Paralympic Games, Deaflympics, World or World School Championships, European Championships, Mediterranean Games, or National or National School Championships."
-    },
-    {
+    },{
         "id": 2,
-        "question": "What is the validity period of the disability transport card?",
-        "answer": "The card is issued with a validity period from the date of issuance until 31-12-2023."
-    },
-    {
-        "id": 3,
         "question": "What is the estimated registration time?",
         "answer": "The registration is expected to be completed within 10 days."
     }

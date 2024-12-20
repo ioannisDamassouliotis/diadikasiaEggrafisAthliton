@@ -209,7 +209,7 @@ $("document").ready(function () {
     if (currentQuestion > 0) {
       $("#backButton").show();
     }
-
+    
     // Get the current question based on language
     let question = currentLanguage === "greek"
       ? all_questions.find(q => q.id === questionId)
