@@ -1,65 +1,133 @@
 [
     {
         "id": 0,
-        "question": "Have you issued a transportation card for the disabled before?",
-        "options": ["First time issuing it", "I lost it and want to reissue it", "I lost it for the second time and want to reissue it"]
+        "question": "Have you achieved 1st to 8th place in the Olympic, World, or European Games in the age categories of men-women, young men-young women, juniors, or children in a sport recognized by the General Secretariat of Sports?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 5,
+            "NO": 1
+        }
     },
     {
         "id": 1,
-        "question": "Are you a permanent and legal resident of Greece?",
-        "options": ["Yes", "No"]
+        "question": "Have you achieved 1st to 3rd place in the Mediterranean Games in the age categories of men-women, young men-young women, juniors, or children in a sport recognized by the General Secretariat of Sports?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 7,
+            "NO": 2
+        }
     },
     {
         "id": 2,
-        "question": "Which of the following categories do you belong to?",
-        "options": ["Greek citizen", 
-                    "Citizen of EU Member States, and citizens of European Economic Area (EEA) Member States",
-                    "Citizen of countries included in the European Convention ratified by Law 4017/1959 (Government Gazette 246/1959, A')",
-                    "Third-country nationals unable to work due to a work accident on Greek territory, or family members of Greek citizens or EU citizens, as defined in Article 20(2) of Presidential Decree 106/2007 (Government Gazette 135 A'), Article 85(4) of Law 4251/2014 (Government Gazette 80 A'), and Article 31(1) of Law 4540/2018 (Government Gazette 91 A')",
-                    "Recognized refugees permanently residing in Greece, whose stay status in Greece is governed by the provisions of the 1951 Convention relating to the Status of Refugees [Presidential Decree 3989/1959 (Government Gazette 201 A')], as amended by the New York Protocol of 1967 on the Status of Refugees [Law 389/1968 (Government Gazette 125 A')]"
-        ]
+        "question": "Have you achieved 1st to 3rd place in World School Games in the high school category in a sport recognized by the General Secretariat of Sports?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 7,
+            "NO": 3
+        }
     },
     {
         "id": 3,
-        "question": "Do you have a disability rate of 67% and above or are you entitled to the preferential OPEKA benefit?",
-        "options": ["Yes", "No"]
+        "question": "Have you achieved or equaled a World or European record in the men-women age category in a sport recognized by the General Secretariat of Sports?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 8,
+            "NO": 4
+        }
     },
     {
         "id": 4,
-        "question": "Which of the following categories do you belong to?",
-        "options": ["I have a medical certificate",
-                   "I have a decision of the administrative director of an insurance institution or the EFKA (Social Insurance Institute)", 
-                   "Recipient of disability benefits for the disabled people granted by OPEKA (Center for Social Welfare and Solidarity)"
-        ]
+        "question": "Have you achieved 1st to 3rd place in National School Championships in the high school category in a sport recognized by the General Secretariat of Sports?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 8,
+            "NO": "END_NO"
+        }
     },
     {
         "id": 5,
-        "question": "Which of the following categories do you belong to?",
-        "options": ["Blind or visually impaired with a disability rate of 80% and above",
-                    "Severe and Profound Mental Retardation - Intelligence Quotient below 34, or mental retardation with a disability rate of 80% or more, or pervasive developmental disorders (infantile autism, autism) with a disability rate of 80% or more",
-                   "Any disability of at least 67%"
-        ]
+        "question": "Was the competition conducted according to the technical specifications of the Olympic Games?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 6,
+            "NO": "END_NO"
+        }
     },
     {
         "id": 6,
-        "question": "Please declare your status below:",
-        "options": ["I am applying for the card myself",
-                   "I am an authorized person of the cardholder",
-                   "I am the guardian of the cardholder"
-        ]
+        "question": "Was the competition conducted according to the technical specifications of the relevant International Federation?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 8,
+            "NO": "END_NO"
+        }
     },
     {
         "id": 7,
-        "question": "Choose for which means of transfer you want the transportation card for the disabled:",
-        "options": ["For long-distance transportation only",
-                   "For all entitlements"
-        ]
+        "question": "Was the sport a team event?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 8,
+            "NO": 9
+        }
     },
     {
         "id": 8,
-        "question": "Choose the category you belong to:",
-        "options": ["Individual income is <strong>less than</strong> 23,000 or family income is <strong>less than</strong> 29,000 (OPEKA income not included)",
-                   "Individual income is <strong>greater than</strong> 23,000 or family income is <strong>greater than</strong> 29,000 (OPEKA income not included)"
-        ]
+        "question": "Did you participate in more than half of the games in the competition in which you were distinguished?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": 9,
+            "NO": "END_NO"
+        }
+    },
+    {
+        "id": 9,
+        "question": "Have you been sanctioned for a doping violation?",
+        "options": [
+            "YES",
+            "NO"
+        ],
+        "next": {
+            "YES": "END_NO",
+            "NO": "END_YES"
+        }
+    },
+    {
+        "id": "END_NO",
+        "question": "Unfortunately, you are not eligible to register.",
+        "options": []
+    },
+    {
+        "id": "END_YES",
+        "question": "Congratulations! You are eligible to register.",
+        "options": []
     }
+    
 ]

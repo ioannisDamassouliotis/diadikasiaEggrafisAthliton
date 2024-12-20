@@ -190,17 +190,6 @@ $("document").ready(function () {
       ft++;
     });
 
-    // if (!all_questions.some((q) => q.id === questionId)) {
-    //   // Αν δεν υπάρχει άλλη ερώτηση, εμφάνιση μηνύματος
-    //   $("#questionContainer").html(
-    //     currentLanguage === "greek"
-    //       ? "Δεν μπορείτε να εγγραφείτε."
-    //       : "You cannot register."
-    //   );
-    //   $("#nextQuestion").hide();
-    //   return;
-    // }
-
     $(".faqContainer").html(faqElement);
   }
 

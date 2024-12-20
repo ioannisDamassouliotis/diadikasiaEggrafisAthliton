@@ -1,27 +1,22 @@
 [
     {
         "id": 0,
-        "question": "How much does the issuance of the transportation card for the disabled cost?",
+        "question": "How much does it cost to register in the list?",
         "answer": "It is provided free of charge."
     },
     {
         "id": 1,
-        "question": "What is the renewal and issuance date?",
-        "answer": "For the renewal and issuance of new transportation card for the disabled, the start date is set as January 23, 2023, and the end date is October 31, 2023."
+        "question": "Who is the process addressed to?",
+        "answer": "The process is intended for athletes who achieve competitive distinctions in the Olympic Games, Paralympic Games, Deaflympics, World or World School Championships, European Championships, Mediterranean Games, or National or National School Championships."
     },
     {
         "id": 2,
-        "question": "What is the validity period of the transportation card for the disabled ?",
-        "answer": "The card is valid from the date of issuance until December 31, 2023."
+        "question": "What is the validity period of the disability transport card?",
+        "answer": "The card is issued with a validity period from the date of issuance until 31-12-2023."
     },
     {
         "id": 3,
-        "question": "Is the issuance process of the transportation card for the disabled available digitally?",
-        "answer": "No, it is not available digitally."
-    },
-    {
-        "id": 4,
-        "question": "Are there remote service points available?",
-        "answer": "Yes, there are. You can visit https://www.gov.gr/ipiresies/polites-kai-kathemerinoteta/ex-apostaseos-exuperetese-politon/exuperetese-me-telediaskepse-apo-kentro-exupereteses-politon-kep."
+        "question": "What is the estimated registration time?",
+        "answer": "The registration is expected to be completed within 10 days."
     }
 ]
